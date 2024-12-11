@@ -35,6 +35,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useViewModeStore } from '~/stores/viewMode';
 import { useApi } from '~/composables/useApi';
 import GridView from '~/components/Views/GridView.vue';
@@ -48,6 +49,8 @@ const characters = ref([]); // Store fetched characters
 const currentPage = ref(1); // Current page for pagination
 const itemsPerPage = 20; // Number of items per page
 const totalPages = ref(0); // Total pages, updated after fetch
+const router = useRouter();
+const route = useRoute();
 
 // View Mode Store (Grid or List view)
 const viewModeStore = useViewModeStore();
@@ -83,7 +86,10 @@ const mappedCharacters = computed(() => {
     id: character.id,
     title: character.name,
     image: character.image,
-    link: `/rickandmorty/${character.id}`,
+    link: {
+      path: `/rickandmorty/${character.id}`,
+      query: { page: currentPage.value }, // Pass current page in query
+    },
     description: character.species,
   }));
 });
@@ -92,12 +98,17 @@ const mappedCharacters = computed(() => {
 const onPageChange = (newPage) => {
   console.log('New Page Selected:', newPage);
   currentPage.value = newPage; // Update the current page
+  router.replace({ query: { page: newPage } });
   fetchCharacters(); // Fetch data for the new page
 };
 
 onMounted(() => {
   if (!viewModeStore.isGridView) {
     viewModeStore.isGridView = true; // Force Grid View as default
+  }
+  const pageFromQuery = parseInt(route.query.page, 10);
+  if (pageFromQuery && pageFromQuery !== currentPage.value) {
+    currentPage.value = pageFromQuery;
   }
   fetchCharacters(); // Fetch data for page 1
 });

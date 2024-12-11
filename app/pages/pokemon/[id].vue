@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-4xl mx-auto p-6">
     <!-- Back to Overview Link -->
-    <BackLink to="/pokemon" text="Back to Pokémon List" />
+    <BackLink :to="{ path: '/pokemon' }" text="Back to Pokémon List" />
 
     <!-- Spinner -->
     <LoadingSpinner v-if="loading" />
