@@ -67,7 +67,7 @@ const fetchCharacters = async () => {
 
     if (response?.results) {
       characters.value = response.results; // Replace characters with new page data
-      totalPages.value = response.info.page; // Calculate total pages
+      totalPages.value = response.info.pages; // Calculate total pages
       console.log("Characters after fetch:", characters.value); // Log the updated characters
     }
   } catch (error) {
