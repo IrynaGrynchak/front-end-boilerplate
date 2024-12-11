@@ -3,10 +3,10 @@
     <div class="flex justify-between items-center m-4">
       <h1 class="text-2xl font-bold">Rick & Morty Characters</h1>
       <UButton
-        :icon="isGridView ? 'i-heroicons-server' : 'i-heroicons-document'"
+        :icon="isGridView ? 'i-heroicons-document' : 'i-heroicons-server'"
         color="primary"
         variant="link"
-        :label="isGridView ? 'Toggle View: Grid' : 'Toggle View: List'"
+        :label="isGridView ? 'Toggle View: List' : 'Toggle View: Grid'"
         :trailing="true"
         @click="toggleView"
         class="mt-2 mr-2"
@@ -73,14 +73,11 @@ const fetchCharacters = async () => {
   loading.value = true;
 
   try {
-    console.log('Fetching data for page:', currentPage.value);
     const response = await fetchData(`character?page=${currentPage.value}`);
-    console.log("API Response:", response); // Log the full API response
 
     if (response?.results) {
       characters.value = response.results; // Replace characters with new page data
       totalPages.value = response.info.pages; // Calculate total pages
-      console.log("Characters after fetch:", characters.value); // Log the updated characters
     }
   } catch (error) {
     console.error('Error fetching characters:', error);
@@ -108,7 +105,6 @@ const mappedCharacters = computed(() => {
 
 // Handle pagination change
 const onPageChange = (newPage) => {
-  console.log('New Page Selected:', newPage);
   currentPage.value = newPage; // Update the current page
   router.replace({ query: { page: newPage } });
   fetchCharacters(); // Fetch data for the new page

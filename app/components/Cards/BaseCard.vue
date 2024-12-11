@@ -39,11 +39,6 @@ const props = defineProps({
 const layoutComponent = computed(() =>
   props.layout === 'horizontal' ? HorizontalCard : VerticalCard
 );
-
-console.log('Layout in BaseCard:', props.layout); // Debugging the layout value
-console.log('Image in BaseCard:', props.image); // Debugging the image value
-console.log('Title in BaseCard:', props.title); // Debugging the title value
-console.log('Description in BaseCard:', props.description); // Debugging the description value
 </script>
 
 

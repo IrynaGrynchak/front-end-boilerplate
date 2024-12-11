@@ -31,6 +31,4 @@ const props = defineProps({
   },
 });
 
-console.log('Items in GridView:', props.items); // Debugging the items value
-
 </script>

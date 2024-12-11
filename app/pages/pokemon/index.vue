@@ -3,10 +3,10 @@
       <div class="flex justify-between items-center m-4">
         <h1 class="text-2xl font-bold">Pokémon</h1>
         <UButton
-          :icon="isGridView ? 'i-heroicons-server' : 'i-heroicons-document'"
+          :icon="isGridView ? 'i-heroicons-document' : 'i-heroicons-server'"
           variant="link"
           color="primary"
-          :label="isGridView ? 'Toggle View: Grid' : 'Toggle View: List'"
+          :label="isGridView ? 'Toggle View: List' : 'Toggle View: Grid'"
           :trailing="true"
           @click="toggleView"
           class="mt-2 mr-2"
@@ -69,7 +69,6 @@
     loading.value = true;
     try {
       const response = await fetchData(`pokemon?limit=${limit}&offset=${offset.value}`);
-      console.log('API Response:', response); // Debug log
       if (response?.results) {
         // Log the new data being added
         pokemons.value.push(...response.results); // Add new Pokémon to the list

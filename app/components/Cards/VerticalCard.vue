@@ -27,10 +27,5 @@
 
 <script setup>
 const props = defineProps(['image', 'title', 'description']);
-
-// Debugging output
-console.log('Image in VerticalCard:', props.image);
-console.log('Title in VerticalCard:', props.title);
-console.log('Description in VerticalCard:', props.description);
 </script>
   
