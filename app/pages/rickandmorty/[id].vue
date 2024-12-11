@@ -1,7 +1,10 @@
 <template>
   <div class="max-w-4xl mx-auto p-4">
     <!-- Back to Overview Link -->
-    <BackLink :to="{ path: '/rickandmorty', query: { page: route.query.page } }" text="Back to Rick and Morty List" />
+    <BackLink 
+      :to="{ path: '/rickandmorty', query: { page: route.query.page, viewMode: route.query.viewMode } }" 
+      text="Back to Rick and Morty List" 
+    />
 
      <!-- Spinner -->
      <LoadingSpinner v-if="loading" />

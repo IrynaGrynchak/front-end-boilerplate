@@ -55,7 +55,16 @@ const route = useRoute();
 // View Mode Store (Grid or List view)
 const viewModeStore = useViewModeStore();
 const isGridView = computed(() => viewModeStore.isGridView);
-const toggleView = viewModeStore.toggleView;
+// Update query params when toggling view
+const toggleView = () => {
+  viewModeStore.toggleView();
+  router.replace({
+    query: {
+      ...route.query,
+      viewMode: viewModeStore.isGridView ? 'grid' : 'list',
+    },
+  });
+};
 
 // Fetch data from API
 const { fetchData } = useApi('https://rickandmortyapi.com/api/');
@@ -88,7 +97,10 @@ const mappedCharacters = computed(() => {
     image: character.image,
     link: {
       path: `/rickandmorty/${character.id}`,
-      query: { page: currentPage.value }, // Pass current page in query
+      query: {
+        page: currentPage.value,
+        viewMode: isGridView.value ? 'grid' : 'list', // Include viewMode in query
+      },
     },
     description: character.species,
   }));
@@ -103,8 +115,11 @@ const onPageChange = (newPage) => {
 };
 
 onMounted(() => {
-  if (!viewModeStore.isGridView) {
-    viewModeStore.isGridView = true; // Force Grid View as default
+  const viewModeFromQuery = route.query.viewMode;
+  if (viewModeFromQuery) {
+    viewModeStore.isGridView = viewModeFromQuery === 'grid';
+  } else {
+    viewModeStore.isGridView = true; // Default to List View when coming back
   }
   const pageFromQuery = parseInt(route.query.page, 10);
   if (pageFromQuery && pageFromQuery !== currentPage.value) {

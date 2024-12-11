@@ -34,6 +34,7 @@
   
   <script setup>
   import { ref, computed, onMounted } from 'vue';
+  import { useRouter, useRoute } from 'vue-router';
   import { useViewModeStore } from '~/stores/viewMode';
   import { useApi } from '~/composables/useApi';
   import GridView from '~/components/Views/GridView.vue';
@@ -46,11 +47,21 @@
   const limit = 20; // Number of Pokémon to fetch per request
   const loading = ref(false);
   const scrollContainer = ref(null);
+  const router = useRouter();
+  const route = useRoute();
 
   // View Mode (Grid/List view)
   const viewModeStore = useViewModeStore();
   const isGridView = computed(() => viewModeStore.isGridView);
-  const toggleView = viewModeStore.toggleView;
+  const toggleView = () => {
+  viewModeStore.toggleView();
+  router.replace({
+    query: {
+      ...route.query,
+      viewMode: viewModeStore.isGridView ? 'grid' : 'list',
+    },
+  });
+};
   
   // Fetch Pokémon data
   const fetchPokemons = async () => {
@@ -87,7 +98,12 @@
         return {
           title: pokemon.name,
           image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`,
-          link: `/pokemon/${id}`,
+          link: {
+            path: `/pokemon/${id}`,
+            query: {
+              viewMode: isGridView.value ? 'grid' : 'list', // Include viewMode in query
+            },
+          },
           id: id,
           };
       });
@@ -95,9 +111,12 @@
   });
 
   onMounted(() => {
-    if (!viewModeStore.isGridView) {
-      viewModeStore.isGridView = true; // Force Grid View as default
-    }
+    const viewModeFromQuery = route.query.viewMode;
+    if (viewModeFromQuery) {
+    viewModeStore.isGridView = viewModeFromQuery === 'grid';
+  } else {
+    viewModeStore.isGridView = true; // Default to List View when coming back
+  }
     fetchPokemons();
   });
 

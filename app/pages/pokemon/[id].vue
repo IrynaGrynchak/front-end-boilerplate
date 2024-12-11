@@ -1,7 +1,10 @@
 <template>
   <div class="max-w-4xl mx-auto p-6">
     <!-- Back to Overview Link -->
-    <BackLink :to="{ path: '/pokemon' }" text="Back to Pokémon List" />
+    <BackLink 
+      :to="{ path: '/pokemon', query: { viewMode: route.query.viewMode } }" 
+      text="Back to Pokémon List" 
+    />
 
     <!-- Spinner -->
     <LoadingSpinner v-if="loading" />
